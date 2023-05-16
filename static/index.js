@@ -7,14 +7,12 @@ function getMousePos(canvas, evt) {
 }
 
 const canvas = document.getElementById('canvas');
-const canvas2 = document.getElementById('canvas2');
 const saveCanvasBtn = document.querySelector('.saveCanvasBtn');
 
 console.assert(canvas != null);
 console.assert(saveCanvasBtn != null);
 
 const ctx = canvas.getContext('2d');
-const ctx2 = canvas2.getContext('2d');
 canvas.addEventListener('mousemove', e => {
   const {x, y} = getMousePos(canvas, e);
   if (e.shiftKey) {
@@ -28,9 +26,11 @@ canvas.addEventListener('mousemove', e => {
 
 saveCanvasBtn.addEventListener('click', _ => {
   const data = canvas.toDataURL();
-  const img = new Image();
-  img.onload = () => {
-    ctx2.drawImage(img, 0, 0);
-  };
-  img.src = data;
+  fetch("/save", {
+    method: "POST",
+    body: JSON.stringify({data}),
+  })
+    .then(res => res.json())
+    .then(data => console.log(data))
+    .catch(err => console.error(err));
 });
