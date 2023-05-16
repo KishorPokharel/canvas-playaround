@@ -10,22 +10,12 @@
     </style>
   </head>
   <body>
-    <canvas id="canvas" width="800" height="600"></canvas>
-  </body>
-  <script>
-    function getMousePos(canvas, evt) {
-      var rect = canvas.getBoundingClientRect();
-      return {
-        x: evt.clientX - rect.left,
-        y: evt.clientY - rect.top,
-      };
-    }
+    <h1>Canvas A</h1>
+    <canvas id="canvas" width="200" height="200"></canvas>
+    <button class="saveCanvasBtn">Save</button>
 
-    const canvas = document.getElementById('canvas');
-    const ctx = canvas.getContext('2d');
-    canvas.addEventListener('mousemove', e => {
-      const {x, y} = getMousePos(canvas, e);
-      ctx.fillRect(x, y, 10, 10);
-    });
-  </script>
+    <h1>Canvas B</h1>
+    <canvas id="canvas2" width="200" height="200"></canvas>
+  </body>
+  <script src="/static/index.js"></script>
 </html>
