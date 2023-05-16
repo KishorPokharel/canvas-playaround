@@ -32,6 +32,7 @@ func main() {
 
 	http.Handle("/static/", http.StripPrefix("/static", fs))
 	http.HandleFunc("/", handleHome(db))
+	http.HandleFunc("/get", handleGetCanvas(db))
 	http.HandleFunc("/save", handleSaveCanvas(db))
 
 	log.Println("server running")
@@ -40,6 +41,12 @@ func main() {
 
 func handleHome(db *sql.DB) http.HandlerFunc {
 	tmpl := template.Must(template.ParseFiles("index.html"))
+	return func(w http.ResponseWriter, r *http.Request) {
+		tmpl.Execute(w, nil)
+	}
+}
+
+func handleGetCanvas(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		query := `
             select dataurl from data order by id desc limit 1
@@ -50,7 +57,7 @@ func handleHome(db *sql.DB) http.HandlerFunc {
 			http.Error(w, "internal server error", http.StatusInternalServerError)
 			return
 		}
-		tmpl.Execute(w, data)
+		json.NewEncoder(w).Encode(&canvasData{Data: data})
 	}
 }
 
